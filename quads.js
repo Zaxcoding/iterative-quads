@@ -17,4 +17,32 @@ function getPixelData() {
 	RawPixelData = context.getImageData(0, 0, canvas.width, canvas.height).data;
 }
 
+function averageColorOfRect(ctx, startX, startY, width, height) {
+	var r = 0, g = 0, b = 0;
+
+	var newPixelData = ctx.getImageData(startX, startY, width, height).data;
+	for (var i = 0, n = newPixelData.length; i < n; i += 4) {
+		r += newPixelData[i];
+		g += newPixelData[i+1];
+		b += newPixelData[i+2];
+	}
+	r /= (newPixelData.length/4);
+	g /= (newPixelData.length/4);
+	b /= (newPixelData.length/4);
+
+	ans = [r, g, b];
+	return ans;
+}
+
+function differenceFromAverage(rgb1, rgb2) {
+	return (rgb1[0] - rgb2[0])*(rgb1[0] - rgb2[0]) + (rgb1[1] - rgb2[1])*(rgb1[1] - rgb2[1]) + (rgb1[2] - rgb2[2])*(rgb1[2] - rgb2[2]);
+}
+
+differenceFromAverage(averageColorOfRect(context, 0, 0, canvas.width/2, canvas.height/2),averageColorOfRect(context, canvas.width/2, canvas.height/2, canvas.width/2, canvas.height/2) )
+
 drawTargetImage();
+
+// web workers?
+// one big call to get the image data, then workers to break it up?
+// build the average colors from bottom up, or as needed?
+// to start, lets just go top down and average as needed
