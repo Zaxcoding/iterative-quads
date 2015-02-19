@@ -5,10 +5,10 @@ var context = [];
 var timer;
 
 var RectScores = [];
-var RectScores[0] = [];
-var RectScores[1] = [];
-var RectScores[2] = [];
-var RectScores[3] = [];
+RectScores[0] = [];
+RectScores[1] = [];
+RectScores[2] = [];
+RectScores[3] = [];
 
 function Score(score, rect) {
 	this.score = score;
