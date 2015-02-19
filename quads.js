@@ -65,18 +65,18 @@ function iterate(ctx, startX, startY, width, height) {
 
 	var canvas = document.getElementById('targetImg');
 	var context = canvas.getContext("2d");
-	context.fillStyle = String(firstQuad[0])  + String(firstQuad[1]) + String(firstQuad[2]);
+	context.fillStyle = firstQuad[0].toString(16)  + firstQuad[1].toString(16) + firstQuad[2].toString(16);
 	context.fillRect(startX, startY, width/2, height/2);
 
-	console.log(String(firstQuad[0])  + String(firstQuad[1]) + String(firstQuad[2]));
+	console.log(firstQuad[0].toString(16)  + firstQuad[1].toString(16) + firstQuad[2].toString(16));
 
-	context.fillStyle = String(secondQuad[0])  + String(secondQuad[1]) + String(secondQuad[2]);
+	context.fillStyle = secondQuad[0].toString(16)  + secondQuad[1].toString(16) + secondQuad[2].toString(16);
 	context.fillRect(startX + width/2, startY, width/2, height/2);
 
-	context.fillStyle = String(thirdQuad[0])  + String(thirdQuad[1]) + String(thirdQuad[2]);
+	context.fillStyle = thirdQuad[0].toString(16)  + thirdQuad[1].toString(16) + thirdQuad[2].toString(16);
 	context.fillRect(startX, startY + height/2, width/2, height/2);
 
-	context.fillStyle = String(fourthQuad[0])  + String(fourthQuad[1]) + String(fourthQuad[2]);
+	context.fillStyle = fourthQuad[0].toString(16)  + fourthQuad[1].toString(16) + fourthQuad[2].toString(16);
 	context.fillRect(startX + width/2, startY + height/2, width/2, height/2);
 
 	var firstDiff = differenceFromAverage(wholeAverage, firstQuad);
