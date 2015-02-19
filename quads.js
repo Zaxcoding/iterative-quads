@@ -113,10 +113,10 @@ function iterate(rect, n) {
 	var thirdDiff = differenceFromAverage(wholeAverage, thirdQuad);
 	var fourthDiff = differenceFromAverage(wholeAverage, fourthQuad);
 
-	RectScores[n].push(new Score(firstDiff, quads[0]));
-	RectScores[n].push(new Score(secondDiff, quads[1]));
-	RectScores[n].push(new Score(thirdDiff, quads[2]));
-	RectScores[n].push(new Score(fourthDiff, quads[3]));
+	RectScores[n].push(new Score(firstDiff * (Math.pow(rect.width*rect.height/4, .25)) , quads[0]));
+	RectScores[n].push(new Score(secondDiff * (Math.pow(rect.width*rect.height/4, .25)), quads[1]));
+	RectScores[n].push(new Score(thirdDiff * (Math.pow(rect.width*rect.height/4, .25)), quads[2]));
+	RectScores[n].push(new Score(fourthDiff * (Math.pow(rect.width*rect.height/4, .25)), quads[3]));
 }
 
 drawTargetImage();
