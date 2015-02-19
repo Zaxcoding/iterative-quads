@@ -1,3 +1,10 @@
 #targetImg {
 	padding-left: 100px;
 }
+ul {
+	width: 480px;
+}
+li {
+	float:left;
+	width:50%;
+}

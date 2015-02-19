@@ -54,11 +54,11 @@ function getPixelData() {
 
 	iterate(new Rect(0, 0, 240, 320), 0);
 	draw(0);
-	iterate(new Rect(120, 0, 240, 320), 1);
+	iterate(new Rect(240, 0, 240, 320), 1);
 	draw(1);
-	iterate(new Rect(0, 160, 240, 320), 2);
+	iterate(new Rect(0, 320, 240, 320), 2);
 	draw(2);
-	iterate(new Rect(120, 160, 240, 320), 3);
+	iterate(new Rect(240, 320, 240, 320), 3);
 	draw(3);
 }
 
