@@ -15,7 +15,20 @@ function getPixelData() {
 	var canvas = document.getElementById('targetImg');
 	var context = canvas.getContext("2d");
 	RawPixelData = context.getImageData(0, 0, canvas.width, canvas.height).data;
-	iterate(context, 0, 0, canvas.width, canvas.height);
+	
+
+	setTimeout(function() {
+		iterate(context, 0, 0, canvas.width/2, canvas.height/2);
+	}, 100);
+	setTimeout(function() {
+		iterate(context, canvas.width/2, 0, canvas.width/2, canvas.height/2);
+	}, 100);
+	setTimeout(function() {
+		iterate(context, 0, canvas.height/2, canvas.width/2, canvas.height/2);
+	}, 100);
+	setTimeout(function() {
+		iterate(context, canvas.width/2, canvas.height/2 canvas.width/2, canvas.height/2);
+	}, 100);
 }
 
 function averageColorOfRect(ctx, startX, startY, width, height) {
@@ -47,10 +60,38 @@ function iterate(ctx, startX, startY, width, height) {
 	var thirdQuad = averageColorOfRect(ctx, startX, startY + height/2, width/2, height/2);
 	var fourthQuad = averageColorOfRect(ctx, startX + width/2, startY + height/2, width/2, height/2);
 
-	console.log("firstdiff", differenceFromAverage(wholeAverage, firstQuad));
-	console.log("seconddiff", differenceFromAverage(wholeAverage, secondQuad));
-	console.log("thirddiff", differenceFromAverage(wholeAverage, thirdQuad));
-	console.log("fourthdiff", differenceFromAverage(wholeAverage, fourthQuad));
+	ctx.fillStyle = firstQuad[0] + "" + firstQuad[1] + "" + firstQuad[2];
+	ctx.fillRect(startX, startY, width/2, height/2);
+
+	ctx.fillStyle = secondQuad[0] + "" + secondQuad[1] + "" + secondQuad[2];
+	ctx.fillRect(startX + width/2, startY, width/2, height/2);
+
+	ctx.fillStyle = thirdQuad[0] + "" + thirdQuad[1] + "" + thirdQuad[2];
+	ctx.fillRect(startX, startY + height/2, width/2, height/2);
+
+	ctx.fillStyle = fourthQuad[0] + "" + fourthQuad[1] + "" + fourthQuad[2];
+	ctx.fillRect(startX + width/2, startY + height/2, width/2, height/2);
+
+	var firstDiff = differenceFromAverage(wholeAverage, firstQuad);
+	var secondDiff = differenceFromAverage(wholeAverage, secondQuad);
+	var thirdDiff = differenceFromAverage(wholeAverage, thirdQuad);
+	var fourthDiff = differenceFromAverage(wholeAverage, fourthQuad);
+
+	var max = Math.max(firstDiff, secondDiff, thirdDiff, fourthDiff);
+
+	if (max == firstDiff) {
+		iterate(ctx, startX, startY, width/2, height/2);
+	}
+	else if (max == secondDiff) {
+		iterate(ctx, startX + width/2, startY, width/2, height/2);
+	}
+	else if (max == thirdDiff) {
+		iterate(startX, startY + height/2, width/2, height/2);
+	}
+	else if (max == fourthDiff) {
+		iterate(ctx, startX + width/2, startY + height/2, width/2, height/2);
+	}
+
 }
 
 drawTargetImage();
