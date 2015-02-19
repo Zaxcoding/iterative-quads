@@ -20,14 +20,17 @@ function getPixelData() {
 	setTimeout(function() {
 		iterate(context, 0, 0, canvas.width/2, canvas.height/2);
 	}, 100);
+
 	setTimeout(function() {
 		iterate(context, canvas.width/2, 0, canvas.width/2, canvas.height/2);
 	}, 100);
+	
 	setTimeout(function() {
 		iterate(context, 0, canvas.height/2, canvas.width/2, canvas.height/2);
 	}, 100);
+	
 	setTimeout(function() {
-		iterate(context, canvas.width/2, canvas.height/2 canvas.width/2, canvas.height/2);
+		iterate(context, canvas.width/2, canvas.height/2, canvas.width/2, canvas.height/2);
 	}, 100);
 }
 
