@@ -41,12 +41,12 @@ function drawTargetImage() {
 	}
 	var canvas2 = document.getElementById('workingImg1');
 	context[0] = canvas2.getContext("2d");
-	canvas2 = document.getElementById('workingImg2');
-	context[1] = canvas2.getContext("2d");
-	canvas2 = document.getElementById('workingImg3');
-	context[2] = canvas2.getContext("2d");
-	canvas2 = document.getElementById('workingImg4');
-	context[3] = canvas2.getContext("2d");
+	var canvas3 = document.getElementById('workingImg2');
+	context[1] = canvas3.getContext("2d");
+	var canvas4 = document.getElementById('workingImg3');
+	context[2] = canvas4.getContext("2d");
+	var canvas5 = document.getElementById('workingImg4');
+	context[3] = canvas5.getContext("2d");
 }
 
 function getPixelData() {
