@@ -71,13 +71,13 @@ function differenceFromAverage(rgb1, rgb2) {
 
 function iterate(rect) {
 
-	if (width < 2.5 || height < 2.5)
+	if (rect.width < 2.5 || rect.height < 2.5)
 		return;
 
 	// find the average color of the full rect and each quadrant
-	var wholeAverage = averageColorOfRect(ctx, startX, startY, width, height);
+	var wholeAverage = averageColorOfRect(rect.startX, rect.startY, rect.width, rect.height);
 
-	var quads = [new Rect(startX, startY, width/2, height/2), new Rect(startX + width/2, startY, width/2, height/2), new Rect(startX, startY + height/2, width/2, height/2), new Rect(startX + width/2, startY + height/2, width/2, height/2)];
+	var quads = [new Rect(rect.startX, rect.startY, rect.width/2, rect.height/2), new Rect(rect.startX + rect.width/2, rect.startY, rect.width/2, rect.height/2), new Rect(rect.startX, rect.startY + rect.height/2, rect.width/2, rect.height/2), new Rect(rect.startX + rect.width/2, rect.startY + rect.height/2, rect.width/2, rect.height/2)];
 
 	var firstQuad = averageColorOfRect(quads[0]);
 	var secondQuad = averageColorOfRect(quads[1]);
@@ -85,18 +85,18 @@ function iterate(rect) {
 	var fourthQuad = averageColorOfRect(quads[3]);
 
 	context.fillStyle = "#" + Math.floor(firstQuad[0]).toString(16)  + Math.floor(firstQuad[1]).toString(16) + Math.floor(firstQuad[2]).toString(16);
-	context.fillRect(startX, startY, width/2, height/2);
+	context.fillRect(rect.startX, rect.startY, rect.width/2, rect.height/2);
 
 	console.log("width: ", width);
 
 	context.fillStyle = "#" + Math.floor(secondQuad[0]).toString(16)  + Math.floor(secondQuad[1]).toString(16) + Math.floor(secondQuad[2]).toString(16);
-	context.fillRect(startX + width/2, startY, width/2, height/2);
+	context.fillRect(rect.startX + rect.width/2, rect.startY, rect.width/2, rect.height/2);
 
 	context.fillStyle = "#" + Math.floor(thirdQuad[0]).toString(16)  + Math.floor(thirdQuad[1]).toString(16) + Math.floor(thirdQuad[2]).toString(16);
-	context.fillRect(startX, startY + height/2, width/2, height/2);
+	context.fillRect(rect.startX, rect.startY + rect.height/2, rect.width/2, rect.height/2);
 
 	context.fillStyle = "#" + Math.floor(fourthQuad[0]).toString(16)  + Math.floor(fourthQuad[1]).toString(16) + Math.floor(fourthQuad[2]).toString(16);
-	context.fillRect(startX + width/2, startY + height/2, width/2, height/2);
+	context.fillRect(rect.startX + rect.width/2, rect.startY + rect.height/2, rect.width/2, rect.height/2);
 
 	var firstDiff = differenceFromAverage(wholeAverage, firstQuad);
 	var secondDiff = differenceFromAverage(wholeAverage, secondQuad);
