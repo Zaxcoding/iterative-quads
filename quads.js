@@ -87,8 +87,6 @@ function iterate(rect) {
 	context.fillStyle = "#" + Math.floor(firstQuad[0]).toString(16)  + Math.floor(firstQuad[1]).toString(16) + Math.floor(firstQuad[2]).toString(16);
 	context.fillRect(rect.startX, rect.startY, rect.width/2, rect.height/2);
 
-	console.log("width: ", width);
-
 	context.fillStyle = "#" + Math.floor(secondQuad[0]).toString(16)  + Math.floor(secondQuad[1]).toString(16) + Math.floor(secondQuad[2]).toString(16);
 	context.fillRect(rect.startX + rect.width/2, rect.startY, rect.width/2, rect.height/2);
 
