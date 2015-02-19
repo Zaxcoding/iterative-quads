@@ -4,6 +4,7 @@ var context = [];
 
 var timer;
 
+var RectScores = [];
 var RectScores[0] = [];
 var RectScores[1] = [];
 var RectScores[2] = [];
