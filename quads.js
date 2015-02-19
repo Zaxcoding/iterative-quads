@@ -75,7 +75,7 @@ function iterate(rect) {
 		return;
 
 	// find the average color of the full rect and each quadrant
-	var wholeAverage = averageColorOfRect(rect.startX, rect.startY, rect.width, rect.height);
+	var wholeAverage = averageColorOfRect(new Rect(rect.startX, rect.startY, rect.width, rect.height));
 
 	var quads = [new Rect(rect.startX, rect.startY, rect.width/2, rect.height/2), new Rect(rect.startX + rect.width/2, rect.startY, rect.width/2, rect.height/2), new Rect(rect.startX, rect.startY + rect.height/2, rect.width/2, rect.height/2), new Rect(rect.startX + rect.width/2, rect.startY + rect.height/2, rect.width/2, rect.height/2)];
 
