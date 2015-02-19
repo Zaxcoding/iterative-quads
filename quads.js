@@ -40,9 +40,9 @@ function drawTargetImage() {
 }
 
 function getPixelData() {
-	RawPixelData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+	RawPixelData = ctx.getImageData(0, 0, ctx.width, ctx.height).data;
 
-	iterate(new Rect(0, 0, canvas.width, canvas.height));
+	iterate(new Rect(0, 0, ctx.width, ctx.height));
 	draw();
 }
 
