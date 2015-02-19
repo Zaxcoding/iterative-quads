@@ -1,10 +1,13 @@
 var RawPixelData;
 var ctx;
-var context;
+var context = [];
 
 var timer;
 
-var RectScores = [];
+var RectScores[0] = [];
+var RectScores[1] = [];
+var RectScores[2] = [];
+var RectScores[3] = [];
 
 function Score(score, rect) {
 	this.score = score;
@@ -18,12 +21,12 @@ function Rect(startX, startY, width, height) {
 	this.height = height;
 }
 
-function draw() {
-	RectScores.sort(function(a, b) { return b.score - a.score; } );
+function draw(n) {
+	RectScores[n].sort(function(a, b) { return b.score - a.score; } );
 
-	iterate(RectScores.shift().rect);
+	iterate(RectScores[n].shift().rect, n);
 
-	setTimeout(draw, 100);
+	setTimeout(function() { draw(n) }, 100);
 }
 
 function drawTargetImage() {
@@ -35,15 +38,27 @@ function drawTargetImage() {
 		ctx.drawImage(srcImg, 0, 0, 480, 640);
 		getPixelData();
 	}
-	var canvas2 = document.getElementById('workingImg');
-	context = canvas2.getContext("2d");
+	var canvas2 = document.getElementById('workingImg1');
+	context[0] = canvas2.getContext("2d");
+	canvas2 = document.getElementById('workingImg2');
+	context[1] = canvas2.getContext("2d");
+	canvas2 = document.getElementById('workingImg3');
+	context[2] = canvas2.getContext("2d");
+	canvas2 = document.getElementById('workingImg4');
+	context[3] = canvas2.getContext("2d");
 }
 
 function getPixelData() {
 	RawPixelData = ctx.getImageData(0, 0, 480, 640).data;
 
-	iterate(new Rect(0, 0, 480, 640));
-	draw();
+	iterate(new Rect(0, 0, 240, 320), 0);
+	draw(0);
+	iterate(new Rect(120, 0, 240, 320), 1);
+	draw(1);
+	iterate(new Rect(0, 160, 240, 320), 2);
+	draw(2);
+	iterate(new Rect(120, 160, 240, 320), 3);
+	draw(3);
 }
 
 function averageColorOfRect(rect) {
@@ -67,7 +82,7 @@ function differenceFromAverage(rgb1, rgb2) {
 	return (rgb1[0] - rgb2[0])*(rgb1[0] - rgb2[0]) + (rgb1[1] - rgb2[1])*(rgb1[1] - rgb2[1]) + (rgb1[2] - rgb2[2])*(rgb1[2] - rgb2[2]);
 }
 
-function iterate(rect) {
+function iterate(rect, n) {
 
 	if (rect.width <= 1 || rect.height <= 1)
 		return;
@@ -82,27 +97,27 @@ function iterate(rect) {
 	var thirdQuad = averageColorOfRect(quads[2]);
 	var fourthQuad = averageColorOfRect(quads[3]);
 
-	context.fillStyle = "#" + Math.floor(firstQuad[0]).toString(16)  + Math.floor(firstQuad[1]).toString(16) + Math.floor(firstQuad[2]).toString(16);
-	context.fillRect(rect.startX, rect.startY, rect.width/2, rect.height/2);
+	context[n].fillStyle = "#" + Math.floor(firstQuad[0]).toString(16)  + Math.floor(firstQuad[1]).toString(16) + Math.floor(firstQuad[2]).toString(16);
+	context[n].fillRect(rect.startX, rect.startY, rect.width/2, rect.height/2);
 
-	context.fillStyle = "#" + Math.floor(secondQuad[0]).toString(16)  + Math.floor(secondQuad[1]).toString(16) + Math.floor(secondQuad[2]).toString(16);
-	context.fillRect(rect.startX + rect.width/2, rect.startY, rect.width/2, rect.height/2);
+	context[n].fillStyle = "#" + Math.floor(secondQuad[0]).toString(16)  + Math.floor(secondQuad[1]).toString(16) + Math.floor(secondQuad[2]).toString(16);
+	context[n].fillRect(rect.startX + rect.width/2, rect.startY, rect.width/2, rect.height/2);
 
-	context.fillStyle = "#" + Math.floor(thirdQuad[0]).toString(16)  + Math.floor(thirdQuad[1]).toString(16) + Math.floor(thirdQuad[2]).toString(16);
-	context.fillRect(rect.startX, rect.startY + rect.height/2, rect.width/2, rect.height/2);
+	context[n].fillStyle = "#" + Math.floor(thirdQuad[0]).toString(16)  + Math.floor(thirdQuad[1]).toString(16) + Math.floor(thirdQuad[2]).toString(16);
+	context[n].fillRect(rect.startX, rect.startY + rect.height/2, rect.width/2, rect.height/2);
 
-	context.fillStyle = "#" + Math.floor(fourthQuad[0]).toString(16)  + Math.floor(fourthQuad[1]).toString(16) + Math.floor(fourthQuad[2]).toString(16);
-	context.fillRect(rect.startX + rect.width/2, rect.startY + rect.height/2, rect.width/2, rect.height/2);
+	context[n].fillStyle = "#" + Math.floor(fourthQuad[0]).toString(16)  + Math.floor(fourthQuad[1]).toString(16) + Math.floor(fourthQuad[2]).toString(16);
+	context[n].fillRect(rect.startX + rect.width/2, rect.startY + rect.height/2, rect.width/2, rect.height/2);
 
 	var firstDiff = differenceFromAverage(wholeAverage, firstQuad);
 	var secondDiff = differenceFromAverage(wholeAverage, secondQuad);
 	var thirdDiff = differenceFromAverage(wholeAverage, thirdQuad);
 	var fourthDiff = differenceFromAverage(wholeAverage, fourthQuad);
 
-	RectScores.push(new Score(firstDiff, quads[0]));
-	RectScores.push(new Score(secondDiff, quads[1]));
-	RectScores.push(new Score(thirdDiff, quads[2]));
-	RectScores.push(new Score(fourthDiff, quads[3]));
+	RectScores[n].push(new Score(firstDiff, quads[0]));
+	RectScores[n].push(new Score(secondDiff, quads[1]));
+	RectScores[n].push(new Score(thirdDiff, quads[2]));
+	RectScores[n].push(new Score(fourthDiff, quads[3]));
 }
 
 drawTargetImage();
