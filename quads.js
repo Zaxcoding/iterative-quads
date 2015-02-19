@@ -23,7 +23,7 @@ function draw() {
 
 	iterate(RectScores.shift().rect);
 
-	timer = setTimeout(draw, 100);
+	setTimeout(draw, 100);
 }
 
 function drawTargetImage() {
@@ -43,6 +43,10 @@ function getPixelData() {
 	RawPixelData = ctx.getImageData(0, 0, 480, 640).data;
 
 	iterate(new Rect(0, 0, 480, 640));
+	iterate(new Rect(0, 0, 240, 320));
+	iterate(new Rect(120, 0, 240, 320));
+	iterate(new Rect(0, 160, 240, 320));
+	iterate(new Rect(120, 160, 240, 320));
 	draw();
 }
 
@@ -69,7 +73,7 @@ function differenceFromAverage(rgb1, rgb2) {
 
 function iterate(rect) {
 
-	if (rect.width < 2.5 || rect.height < 2.5)
+	if (rect.width <= 1 || rect.height <= 1)
 		return;
 
 	// find the average color of the full rect and each quadrant
