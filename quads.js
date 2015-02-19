@@ -2,6 +2,8 @@ var RawPixelData;
 var ctx;
 var context;
 
+var timer;
+
 var RectScores = [];
 
 function Score(score, rect) {
@@ -21,7 +23,7 @@ function draw() {
 
 	iterate(RectScores.shift().rect);
 
-	setTimeout(draw, 1000/60);
+	timer = setTimeout(draw, 100);
 }
 
 function drawTargetImage() {
