@@ -56,6 +56,7 @@ function differenceFromAverage(rgb1, rgb2) {
 }
 
 function iterate(ctx, startX, startY, width, height) {
+
 	// find the average color of the full rect and each quadrant
 	var wholeAverage = averageColorOfRect(ctx, startX, startY, width, height);
 	var firstQuad = averageColorOfRect(ctx, startX, startY, width/2, height/2);
@@ -63,12 +64,12 @@ function iterate(ctx, startX, startY, width, height) {
 	var thirdQuad = averageColorOfRect(ctx, startX, startY + height/2, width/2, height/2);
 	var fourthQuad = averageColorOfRect(ctx, startX + width/2, startY + height/2, width/2, height/2);
 
-	var canvas = document.getElementById('targetImg');
+	var canvas = document.getElementById('workingImg');
 	var context = canvas.getContext("2d");
 	context.fillStyle = "#" + Math.floor(firstQuad[0]).toString(16)  + Math.floor(firstQuad[1]).toString(16) + Math.floor(firstQuad[2]).toString(16);
 	context.fillRect(startX, startY, width/2, height/2);
 
-	console.log("#" + Math.floor(firstQuad[0]).toString(16)  + Math.floor(firstQuad[1]).toString(16) + Math.floor(firstQuad[2]).toString(16));
+	console.log("width: ", width);
 
 	context.fillStyle = "#" + Math.floor(secondQuad[0]).toString(16)  + Math.floor(secondQuad[1]).toString(16) + Math.floor(secondQuad[2]).toString(16);
 	context.fillRect(startX + width/2, startY, width/2, height/2);
