@@ -63,17 +63,21 @@ function iterate(ctx, startX, startY, width, height) {
 	var thirdQuad = averageColorOfRect(ctx, startX, startY + height/2, width/2, height/2);
 	var fourthQuad = averageColorOfRect(ctx, startX + width/2, startY + height/2, width/2, height/2);
 
-	ctx.fillStyle = firstQuad[0] + "" + firstQuad[1] + "" + firstQuad[2];
-	ctx.fillRect(startX, startY, width/2, height/2);
+	var canvas = document.getElementById('targetImg');
+	var context = canvas.getContext("2d");
+	context.fillStyle = String(firstQuad[0])  + String(firstQuad[1]) + String(firstQuad[2]);
+	context.fillRect(startX, startY, width/2, height/2);
 
-	ctx.fillStyle = secondQuad[0] + "" + secondQuad[1] + "" + secondQuad[2];
-	ctx.fillRect(startX + width/2, startY, width/2, height/2);
+	console.log(String(firstQuad[0])  + String(firstQuad[1]) + String(firstQuad[2]));
 
-	ctx.fillStyle = thirdQuad[0] + "" + thirdQuad[1] + "" + thirdQuad[2];
-	ctx.fillRect(startX, startY + height/2, width/2, height/2);
+	context.fillStyle = String(secondQuad[0])  + String(secondQuad[1]) + String(secondQuad[2]);
+	context.fillRect(startX + width/2, startY, width/2, height/2);
 
-	ctx.fillStyle = fourthQuad[0] + "" + fourthQuad[1] + "" + fourthQuad[2];
-	ctx.fillRect(startX + width/2, startY + height/2, width/2, height/2);
+	context.fillStyle = String(thirdQuad[0])  + String(thirdQuad[1]) + String(thirdQuad[2]);
+	context.fillRect(startX, startY + height/2, width/2, height/2);
+
+	context.fillStyle = String(fourthQuad[0])  + String(fourthQuad[1]) + String(fourthQuad[2]);
+	context.fillRect(startX + width/2, startY + height/2, width/2, height/2);
 
 	var firstDiff = differenceFromAverage(wholeAverage, firstQuad);
 	var secondDiff = differenceFromAverage(wholeAverage, secondQuad);
