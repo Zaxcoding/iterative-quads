@@ -50,22 +50,20 @@ function drawTargetImage() {
 }
 
 function getPixelData() {
-	RawPixelData = ctx.getImageData(0, 0, 480, 640).data;
-
 	iterate(new Rect(0, 0, 240, 320), 0);
 	draw(0);
-	iterate(new Rect(240, 0, 240, 320), 1);
+	iterate(new Rect(0, 0, 240, 320), 1);
 	draw(1);
-	iterate(new Rect(0, 320, 240, 320), 2);
+	iterate(new Rect(0, 0, 240, 320), 2);
 	draw(2);
-	iterate(new Rect(240, 320, 240, 320), 3);
+	iterate(new Rect(0, 0, 240, 320), 3);
 	draw(3);
 }
 
-function averageColorOfRect(rect) {
+function averageColorOfRect(rect, n) {
 	var r = 0, g = 0, b = 0;
 
-	var newPixelData = ctx.getImageData(rect.startX, rect.startY, rect.width, rect.height).data;
+	var newPixelData = ctx.getImageData(rect.startX + (n==1 || n ==3)*240, rect.startY + (n==2 || n == 3)*320, rect.width, rect.height).data;
 	for (var i = 0, n = newPixelData.length; i < n; i += 4) {
 		r += newPixelData[i];
 		g += newPixelData[i+1];
@@ -89,14 +87,14 @@ function iterate(rect, n) {
 		return;
 
 	// find the average color of the full rect and each quadrant
-	var wholeAverage = averageColorOfRect(rect);
+	var wholeAverage = averageColorOfRect(rect, n);
 
 	var quads = [new Rect(rect.startX, rect.startY, rect.width/2, rect.height/2), new Rect(rect.startX + rect.width/2, rect.startY, rect.width/2, rect.height/2), new Rect(rect.startX, rect.startY + rect.height/2, rect.width/2, rect.height/2), new Rect(rect.startX + rect.width/2, rect.startY + rect.height/2, rect.width/2, rect.height/2)];
 
-	var firstQuad = averageColorOfRect(quads[0]);
-	var secondQuad = averageColorOfRect(quads[1]);
-	var thirdQuad = averageColorOfRect(quads[2]);
-	var fourthQuad = averageColorOfRect(quads[3]);
+	var firstQuad = averageColorOfRect(quads[0], n);
+	var secondQuad = averageColorOfRect(quads[1], n);
+	var thirdQuad = averageColorOfRect(quads[2], n);
+	var fourthQuad = averageColorOfRect(quads[3], n);
 
 	context[n].fillStyle = "#" + Math.floor(firstQuad[0]).toString(16)  + Math.floor(firstQuad[1]).toString(16) + Math.floor(firstQuad[2]).toString(16);
 	context[n].fillRect(rect.startX, rect.startY, rect.width/2, rect.height/2);
