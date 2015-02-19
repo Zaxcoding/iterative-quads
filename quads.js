@@ -43,10 +43,6 @@ function getPixelData() {
 	RawPixelData = ctx.getImageData(0, 0, 480, 640).data;
 
 	iterate(new Rect(0, 0, 480, 640));
-	iterate(new Rect(0, 0, 240, 320));
-	iterate(new Rect(120, 0, 240, 320));
-	iterate(new Rect(0, 160, 240, 320));
-	iterate(new Rect(120, 160, 240, 320));
 	draw();
 }
 
@@ -77,7 +73,7 @@ function iterate(rect) {
 		return;
 
 	// find the average color of the full rect and each quadrant
-	var wholeAverage = averageColorOfRect(new Rect(rect.startX, rect.startY, rect.width, rect.height));
+	var wholeAverage = averageColorOfRect(rect);
 
 	var quads = [new Rect(rect.startX, rect.startY, rect.width/2, rect.height/2), new Rect(rect.startX + rect.width/2, rect.startY, rect.width/2, rect.height/2), new Rect(rect.startX, rect.startY + rect.height/2, rect.width/2, rect.height/2), new Rect(rect.startX + rect.width/2, rect.startY + rect.height/2, rect.width/2, rect.height/2)];
 
