@@ -32,7 +32,7 @@ function drawTargetImage() {
 	var srcImg = new Image();
 	srcImg.src = "http://zachsadler.com/iterative-quads/target.jpg";
 	srcImg.onload = function() {
-		context.drawImage(srcImg, 0, 0, 480, 640);
+		ctx.drawImage(srcImg, 0, 0, 480, 640);
 		getPixelData();
 	}
 	var canvas2 = document.getElementById('workingImg');
@@ -40,9 +40,7 @@ function drawTargetImage() {
 }
 
 function getPixelData() {
-	var canvas = document.getElementById('targetImg');
-	var context = canvas.getContext("2d");
-	RawPixelData = context.getImageData(0, 0, canvas.width, canvas.height).data;
+	RawPixelData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
 	iterate(new Rect(0, 0, canvas.width, canvas.height));
 	draw();
