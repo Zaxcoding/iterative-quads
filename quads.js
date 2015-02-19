@@ -57,6 +57,9 @@ function differenceFromAverage(rgb1, rgb2) {
 
 function iterate(ctx, startX, startY, width, height) {
 
+	if (width < 5 || height < 5)
+		return;
+
 	// find the average color of the full rect and each quadrant
 	var wholeAverage = averageColorOfRect(ctx, startX, startY, width, height);
 	var firstQuad = averageColorOfRect(ctx, startX, startY, width/2, height/2);
@@ -85,19 +88,29 @@ function iterate(ctx, startX, startY, width, height) {
 	var thirdDiff = differenceFromAverage(wholeAverage, thirdQuad);
 	var fourthDiff = differenceFromAverage(wholeAverage, fourthQuad);
 
-	var max = Math.max(firstDiff, secondDiff, thirdDiff, fourthDiff);
+	while (true) {
+		var max = Math.max(firstDiff, secondDiff, thirdDiff, fourthDiff);
 
-	if (max == firstDiff) {
-		iterate(ctx, startX, startY, width/2, height/2);
-	}
-	else if (max == secondDiff) {
-		iterate(ctx, startX + width/2, startY, width/2, height/2);
-	}
-	else if (max == thirdDiff) {
-		iterate(startX, startY + height/2, width/2, height/2);
-	}
-	else if (max == fourthDiff) {
-		iterate(ctx, startX + width/2, startY + height/2, width/2, height/2);
+		if (max == -Infinity) {
+			return;
+		}
+
+		if (max == firstDiff) {
+			iterate(ctx, startX, startY, width/2, height/2);
+			firstDiff = -Infinity;	
+		}
+		else if (max == secondDiff) {
+			iterate(ctx, startX + width/2, startY, width/2, height/2);
+			secondDiff = -Infinity;
+		}
+		else if (max == thirdDiff) {
+			iterate(ctx, startX, startY + height/2, width/2, height/2);
+			thirdDiff = -Infinity;
+		}
+		else if (max == fourthDiff) {
+			iterate(ctx, startX + width/2, startY + height/2, width/2, height/2);
+			fourthDiff = -Infinity;
+		}
 	}
 
 }
