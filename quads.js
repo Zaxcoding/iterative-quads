@@ -1,43 +1,55 @@
 var RawPixelData;
+var ctx;
+var context;
+
+var RectScores = [];
+
+function Score(score, rect) {
+	this.score = score;
+	this.rect = rect;
+}
+
+function Rect(startX, startY, width, height) {
+	this.startX = startX;
+	this.startY = startY;
+	this.width = width;
+	this.height = height;
+}
+
+function draw() {
+	RectScores.sort(function(a, b) { return b.score - a.score; } );
+
+	iterate(RectScores.shift().rect);
+
+	setTimeout(draw, 1000/60);
+}
 
 function drawTargetImage() {
 	var canvas = document.getElementById('targetImg');
-	var context = canvas.getContext("2d");
+	ctx = canvas.getContext("2d");
 	var srcImg = new Image();
-	srcImg.src = "target.jpg";
+	srcImg.src = "http://zachsadler.com/iterative-quads/target.jpg";
 	srcImg.onload = function() {
 		context.drawImage(srcImg, 0, 0, 480, 640);
 		getPixelData();
 	}
+	var canvas2 = document.getElementById('workingImg');
+	context = canvas2.getContext("2d");
 }
 
 function getPixelData() {
 	var canvas = document.getElementById('targetImg');
 	var context = canvas.getContext("2d");
 	RawPixelData = context.getImageData(0, 0, canvas.width, canvas.height).data;
-	
 
-	setTimeout(function() {
-		iterate(context, 0, 0, canvas.width/2, canvas.height/2);
-	}, 100);
-
-	setTimeout(function() {
-		iterate(context, canvas.width/2, 0, canvas.width/2, canvas.height/2);
-	}, 100);
-	
-	setTimeout(function() {
-		iterate(context, 0, canvas.height/2, canvas.width/2, canvas.height/2);
-	}, 100);
-	
-	setTimeout(function() {
-		iterate(context, canvas.width/2, canvas.height/2, canvas.width/2, canvas.height/2);
-	}, 100);
+	iterate(new Rect(0, 0, canvas.width, canvas.height));
+	draw();
 }
 
-function averageColorOfRect(ctx, startX, startY, width, height) {
+function averageColorOfRect(rect) {
 	var r = 0, g = 0, b = 0;
 
-	var newPixelData = ctx.getImageData(startX, startY, width, height).data;
+	var newPixelData = ctx.getImageData(rect.startX, rect.startY, rect.width, rect.height).data;
 	for (var i = 0, n = newPixelData.length; i < n; i += 4) {
 		r += newPixelData[i];
 		g += newPixelData[i+1];
@@ -55,20 +67,21 @@ function differenceFromAverage(rgb1, rgb2) {
 	return (rgb1[0] - rgb2[0])*(rgb1[0] - rgb2[0]) + (rgb1[1] - rgb2[1])*(rgb1[1] - rgb2[1]) + (rgb1[2] - rgb2[2])*(rgb1[2] - rgb2[2]);
 }
 
-function iterate(ctx, startX, startY, width, height) {
+function iterate(rect) {
 
-	if (width < 5 || height < 5)
+	if (width < 2.5 || height < 2.5)
 		return;
 
 	// find the average color of the full rect and each quadrant
 	var wholeAverage = averageColorOfRect(ctx, startX, startY, width, height);
-	var firstQuad = averageColorOfRect(ctx, startX, startY, width/2, height/2);
-	var secondQuad = averageColorOfRect(ctx, startX + width/2, startY, width/2, height/2);
-	var thirdQuad = averageColorOfRect(ctx, startX, startY + height/2, width/2, height/2);
-	var fourthQuad = averageColorOfRect(ctx, startX + width/2, startY + height/2, width/2, height/2);
 
-	var canvas = document.getElementById('workingImg');
-	var context = canvas.getContext("2d");
+	var quads = [new Rect(startX, startY, width/2, height/2), new Rect(startX + width/2, startY, width/2, height/2), new Rect(startX, startY + height/2, width/2, height/2), new Rect(startX + width/2, startY + height/2, width/2, height/2)];
+
+	var firstQuad = averageColorOfRect(quads[0]);
+	var secondQuad = averageColorOfRect(quads[1]);
+	var thirdQuad = averageColorOfRect(quads[2]);
+	var fourthQuad = averageColorOfRect(quads[3]);
+
 	context.fillStyle = "#" + Math.floor(firstQuad[0]).toString(16)  + Math.floor(firstQuad[1]).toString(16) + Math.floor(firstQuad[2]).toString(16);
 	context.fillRect(startX, startY, width/2, height/2);
 
@@ -88,31 +101,10 @@ function iterate(ctx, startX, startY, width, height) {
 	var thirdDiff = differenceFromAverage(wholeAverage, thirdQuad);
 	var fourthDiff = differenceFromAverage(wholeAverage, fourthQuad);
 
-	while (true) {
-		var max = Math.max(firstDiff, secondDiff, thirdDiff, fourthDiff);
-
-		if (max == -Infinity) {
-			return;
-		}
-
-		if (max == firstDiff) {
-			iterate(ctx, startX, startY, width/2, height/2);
-			firstDiff = -Infinity;	
-		}
-		else if (max == secondDiff) {
-			iterate(ctx, startX + width/2, startY, width/2, height/2);
-			secondDiff = -Infinity;
-		}
-		else if (max == thirdDiff) {
-			iterate(ctx, startX, startY + height/2, width/2, height/2);
-			thirdDiff = -Infinity;
-		}
-		else if (max == fourthDiff) {
-			iterate(ctx, startX + width/2, startY + height/2, width/2, height/2);
-			fourthDiff = -Infinity;
-		}
-	}
-
+	RectScores.push(new Score(firstDiff, quads[0]));
+	RectScores.push(new Score(secondDiff, quads[1]));
+	RectScores.push(new Score(thirdDiff, quads[2]));
+	RectScores.push(new Score(fourthDiff, quads[3]));
 }
 
 drawTargetImage();
