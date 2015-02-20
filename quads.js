@@ -34,7 +34,7 @@ function drawTargetImage() {
 	var canvas = document.getElementById('targetImg');
 	ctx = canvas.getContext("2d");
 	var srcImg = new Image();
-	srcImg.src = "http://zachsadler.com/iterative-quads/target.jpg";
+	srcImg.src = "http://zachsadler.com/iterative-quads/owl.jpg";
 	srcImg.onload = function() {
 		ctx.drawImage(srcImg, 0, 0, 480, 640);
 		getPixelData();
@@ -63,7 +63,11 @@ function getPixelData() {
 function averageColorOfRect(rect, n) {
 	var r = 0, g = 0, b = 0;
 
-	var newPixelData = ctx.getImageData(rect.startX + (n==1 || n ==3)*240, rect.startY + (n==2 || n == 3)*320, rect.width, rect.height).data;
+	if (rect.width < 1 || rect.height < 1) {
+		return -Infinity;
+	}
+
+	var newPixelData = ctx.getImageData(rect.startX + (n==1 || n ==3)*240, rect.startY + (n==2 || n == 3)*320, Math.floor(rect.width), Math.floor(rect.height)).data;
 	for (var i = 0, n = newPixelData.length; i < n; i += 4) {
 		r += newPixelData[i];
 		g += newPixelData[i+1];
@@ -83,7 +87,7 @@ function differenceFromAverage(rgb1, rgb2) {
 
 function iterate(rect, n) {
 
-	if (rect.width <= 1 || rect.height <= 1)
+	if (rect.width < 2 || rect.height < 2)
 		return;
 
 	// find the average color of the full rect and each quadrant
@@ -96,16 +100,20 @@ function iterate(rect, n) {
 	var thirdQuad = averageColorOfRect(quads[2], n);
 	var fourthQuad = averageColorOfRect(quads[3], n);
 
-	context[n].fillStyle = "#" + Math.floor(firstQuad[0]).toString(16)  + Math.floor(firstQuad[1]).toString(16) + Math.floor(firstQuad[2]).toString(16);
+	context[n].fillStyle = "#" + ("00" + Math.floor(firstQuad[0]).toString(16)).slice(-2)  + ("00" + Math.floor(firstQuad[1]).toString(16)).slice(-2) + ("00" + Math.floor(firstQuad[2]).toString(16)).slice(-2);
+	//context[n].strokeRect(rect.startX, rect.startY, rect.width/2, rect.height/2);
 	context[n].fillRect(rect.startX, rect.startY, rect.width/2, rect.height/2);
-
-	context[n].fillStyle = "#" + Math.floor(secondQuad[0]).toString(16)  + Math.floor(secondQuad[1]).toString(16) + Math.floor(secondQuad[2]).toString(16);
+	
+	context[n].fillStyle = "#" + ("00" + Math.floor(secondQuad[0]).toString(16)).slice(-2)  + ("00" + Math.floor(secondQuad[1]).toString(16)).slice(-2) + ("00" + Math.floor(secondQuad[2]).toString(16)).slice(-2);
+	//context[n].strokeRect(rect.startX + rect.width/2, rect.startY, rect.width/2, rect.height/2);
 	context[n].fillRect(rect.startX + rect.width/2, rect.startY, rect.width/2, rect.height/2);
 
-	context[n].fillStyle = "#" + Math.floor(thirdQuad[0]).toString(16)  + Math.floor(thirdQuad[1]).toString(16) + Math.floor(thirdQuad[2]).toString(16);
+	context[n].fillStyle = "#" + ("00" + Math.floor(thirdQuad[0]).toString(16)).slice(-2)  + ("00" + Math.floor(thirdQuad[1]).toString(16)).slice(-2) + ("00" + Math.floor(thirdQuad[2]).toString(16)).slice(-2);
+	//context[n].strokeRect(rect.startX, rect.startY + rect.height/2, rect.width/2, rect.height/2);
 	context[n].fillRect(rect.startX, rect.startY + rect.height/2, rect.width/2, rect.height/2);
 
-	context[n].fillStyle = "#" + Math.floor(fourthQuad[0]).toString(16)  + Math.floor(fourthQuad[1]).toString(16) + Math.floor(fourthQuad[2]).toString(16);
+	context[n].fillStyle = "#" + ("00" + Math.floor(fourthQuad[0]).toString(16)).slice(-2)  + ("00" + Math.floor(fourthQuad[1]).toString(16)).slice(-2) + ("00" + Math.floor(fourthQuad[2]).toString(16)).slice(-2);
+	//context[n].strokeRect(rect.startX + rect.width/2, rect.startY + rect.height/2, rect.width/2, rect.height/2);
 	context[n].fillRect(rect.startX + rect.width/2, rect.startY + rect.height/2, rect.width/2, rect.height/2);
 
 	var firstDiff = differenceFromAverage(wholeAverage, firstQuad);
@@ -113,10 +121,10 @@ function iterate(rect, n) {
 	var thirdDiff = differenceFromAverage(wholeAverage, thirdQuad);
 	var fourthDiff = differenceFromAverage(wholeAverage, fourthQuad);
 
-	RectScores[n].push(new Score(firstDiff * (Math.pow(rect.width*rect.height/4, .25)) , quads[0]));
-	RectScores[n].push(new Score(secondDiff * (Math.pow(rect.width*rect.height/4, .25)), quads[1]));
-	RectScores[n].push(new Score(thirdDiff * (Math.pow(rect.width*rect.height/4, .25)), quads[2]));
-	RectScores[n].push(new Score(fourthDiff * (Math.pow(rect.width*rect.height/4, .25)), quads[3]));
+	RectScores[n].push(new Score(firstDiff * (rect.width*rect.height) , quads[0]));
+	RectScores[n].push(new Score(secondDiff * (rect.width*rect.height), quads[1]));
+	RectScores[n].push(new Score(thirdDiff * (rect.width*rect.height), quads[2]));
+	RectScores[n].push(new Score(fourthDiff * (rect.width*rect.height), quads[3]));
 }
 
 drawTargetImage();
