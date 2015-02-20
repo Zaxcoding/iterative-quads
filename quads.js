@@ -87,8 +87,14 @@ function differenceFromAverage(rgb1, rgb2) {
 
 function iterate(rect, n) {
 
-	if (rect.width < 2 || rect.height < 2)
+	if (rect.width < 2 && rect.height < 2)
 		return;
+
+	if (rect.width < 2)
+		rect.width = 2;
+	
+	if (rect.height < 2)
+		rect.height = 2;
 
 	// find the average color of the full rect and each quadrant
 	var wholeAverage = averageColorOfRect(rect, n);
