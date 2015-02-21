@@ -27,7 +27,7 @@ function draw(n) {
 
 	iterate(RectScores[n].shift().rect, n);
 
-	setTimeout(function() { draw(n) }, 100);
+	setTimeout(function() { draw(n) }, 10);
 }
 
 function drawTargetImage() {
@@ -92,7 +92,7 @@ function iterate(rect, n) {
 
 	if (rect.width < 2)
 		rect.width = 2;
-	
+
 	if (rect.height < 2)
 		rect.height = 2;
 
@@ -107,19 +107,15 @@ function iterate(rect, n) {
 	var fourthQuad = averageColorOfRect(quads[3], n);
 
 	context[n].fillStyle = "#" + ("00" + Math.floor(firstQuad[0]).toString(16)).slice(-2)  + ("00" + Math.floor(firstQuad[1]).toString(16)).slice(-2) + ("00" + Math.floor(firstQuad[2]).toString(16)).slice(-2);
-	//context[n].strokeRect(rect.startX, rect.startY, rect.width/2, rect.height/2);
 	context[n].fillRect(rect.startX, rect.startY, rect.width/2, rect.height/2);
-	
+
 	context[n].fillStyle = "#" + ("00" + Math.floor(secondQuad[0]).toString(16)).slice(-2)  + ("00" + Math.floor(secondQuad[1]).toString(16)).slice(-2) + ("00" + Math.floor(secondQuad[2]).toString(16)).slice(-2);
-	//context[n].strokeRect(rect.startX + rect.width/2, rect.startY, rect.width/2, rect.height/2);
 	context[n].fillRect(rect.startX + rect.width/2, rect.startY, rect.width/2, rect.height/2);
 
 	context[n].fillStyle = "#" + ("00" + Math.floor(thirdQuad[0]).toString(16)).slice(-2)  + ("00" + Math.floor(thirdQuad[1]).toString(16)).slice(-2) + ("00" + Math.floor(thirdQuad[2]).toString(16)).slice(-2);
-	//context[n].strokeRect(rect.startX, rect.startY + rect.height/2, rect.width/2, rect.height/2);
 	context[n].fillRect(rect.startX, rect.startY + rect.height/2, rect.width/2, rect.height/2);
 
 	context[n].fillStyle = "#" + ("00" + Math.floor(fourthQuad[0]).toString(16)).slice(-2)  + ("00" + Math.floor(fourthQuad[1]).toString(16)).slice(-2) + ("00" + Math.floor(fourthQuad[2]).toString(16)).slice(-2);
-	//context[n].strokeRect(rect.startX + rect.width/2, rect.startY + rect.height/2, rect.width/2, rect.height/2);
 	context[n].fillRect(rect.startX + rect.width/2, rect.startY + rect.height/2, rect.width/2, rect.height/2);
 
 	var firstDiff = differenceFromAverage(wholeAverage, firstQuad);
@@ -127,15 +123,10 @@ function iterate(rect, n) {
 	var thirdDiff = differenceFromAverage(wholeAverage, thirdQuad);
 	var fourthDiff = differenceFromAverage(wholeAverage, fourthQuad);
 
-	RectScores[n].push(new Score(firstDiff * (rect.width*rect.height) , quads[0]));
-	RectScores[n].push(new Score(secondDiff * (rect.width*rect.height), quads[1]));
-	RectScores[n].push(new Score(thirdDiff * (rect.width*rect.height), quads[2]));
-	RectScores[n].push(new Score(fourthDiff * (rect.width*rect.height), quads[3]));
+	RectScores[n].push(new Score(firstDiff * Math.pow(rect.width*rect.height, .85) , quads[0]));
+	RectScores[n].push(new Score(secondDiff * Math.pow(rect.width*rect.height, .85), quads[1]));
+	RectScores[n].push(new Score(thirdDiff * Math.pow(rect.width*rect.height, .85), quads[2]));
+	RectScores[n].push(new Score(fourthDiff * Math.pow(rect.width*rect.height, .85), quads[3]));
 }
 
 drawTargetImage();
-
-// web workers?
-// one big call to get the image data, then workers to break it up?
-// build the average colors from bottom up, or as needed?
-// to start, lets just go top down and average as needed
