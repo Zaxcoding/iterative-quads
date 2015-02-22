@@ -4,7 +4,9 @@ var RectScores;
 
 var QuadsToStartOut = 4;
 var TargetImage = "owl.jpg";
-var DrawTimeout = 25;
+var DrawTimeout = 10;
+var AreaImportance = .85;
+var GridLines = false;
 
 // simple object to hold the score and corresponding rect
 function Score(score, rect) {
@@ -30,6 +32,7 @@ function draw(n) {
 }
 
 function drawTargetImage(target) {
+	TargetImage = target;
 
 	// this is the target image we are trying to replicate
 	var canvas = document.getElementById('targetImg');
@@ -111,10 +114,22 @@ function iterate(rect, n) {
 	for (var i = 0; i < 4; i++) {
 		quadAverages[i] = averageColorOfRect(quads[i], n);
 		workingImageCtxArray[n].fillStyle = "#" + ("00" + Math.floor(quadAverages[i][0]).toString(16)).slice(-2)  + ("00" + Math.floor(quadAverages[i][1]).toString(16)).slice(-2) + ("00" + Math.floor(quadAverages[i][2]).toString(16)).slice(-2);
+		if (GridLines)
+			workingImageCtxArray[n].strokeRect(quads[i].startX, quads[i].startY, quads[i].width, quads[i].height);
 		workingImageCtxArray[n].fillRect(quads[i].startX, quads[i].startY, quads[i].width, quads[i].height);
 		differences[i] = differenceFromAverage(wholeAverage, quadAverages[i]);
-		RectScores[n].push(new Score(differences[i] * Math.pow(rect.width*rect.height, .85) , quads[i]));
+		RectScores[n].push(new Score(differences[i] * Math.pow(rect.width*rect.height, AreaImportance) , quads[i]));
 	}
+}
+
+function areaFactor(n) {
+	AreaImportance = n;
+	drawTargetImage(TargetImage);
+}
+
+function gridLines(n) {
+	GridLines = n;
+	drawTargetImage(TargetImage);
 }
 
 drawTargetImage(TargetImage);

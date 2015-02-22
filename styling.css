@@ -8,3 +8,11 @@ li {
 	float:left;
 	width:50%;
 }
+input {
+	font-size: 22px;
+	margin-left: 25px;
+}
+span {
+	font-size: 22px;
+	margin-left:25px;
+}

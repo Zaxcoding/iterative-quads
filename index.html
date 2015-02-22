@@ -10,9 +10,29 @@
 		<li><canvas id="workingImg3" width="240" height="320"></canvas></li>
 		<li><canvas id="workingImg4" width="240" height="320"></canvas></li>
 	</ul>
-		<canvas id="targetImg" width="480" height="640"></canvas>
-		<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
-		<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-		<script src="quads.js"></script>
+	<canvas id="targetImg" width="480" height="640"></canvas>
+	<p>
+		<span>Which image to recreate?</span>
+		<input type="submit" value="Owl" onclick="drawTargetImage('owl.jpg')">
+		<input type="submit" value="Milli" onclick="drawTargetImage('milli.jpg')">
+		<input type="submit" value="Mona Lisa" onclick="drawTargetImage('mona-lisa.jpg')">
+		<input type="submit" value="Statue" onclick="drawTargetImage('statue.jpg')">
+		<input type="submit" value="Flower" onclick="drawTargetImage('flower.jpg')">
+	</p>
+	<p>
+		<span>Breaking down big rectangles is:</span>
+		<input type="submit" value="Standard" onclick="areaFactor(.85)">
+		<input type="submit" value="Less Important" onclick="areaFactor(.25)">
+		<input type="submit" value="Very Important" onclick="areaFactor(1)">
+		<input type="submit" value="Extremely Important" onclick="areaFactor(2)">
+	</p>
+	<p>
+		<span>Turn on grid lines?</span>
+		<input type="submit" value="Yes" onclick="gridLines(true)">
+		<input type="submit" value="No" onclick="gridLines(false)">
+ 	</p>
+	<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<script src="quads.js"></script>
 	</body>
 </html>
